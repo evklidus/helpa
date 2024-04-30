@@ -12,6 +12,7 @@ dependencies:
   shared_preferences: ^2.2.3
   cupertino_icons: ^1.0.6
   camera: ^0.10.5+9
+  flutter_tts: ^4.0.2
 
 dev_dependencies:
   flutter_test:

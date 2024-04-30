@@ -1,5 +1,4 @@
 import 'package:flutter/material.dart';
-import 'package:helpa/src/features/interview/widget/interview_screen.dart';
 import 'package:helpa/src/features/summary/data/summaries_data_provider.dart';
 import 'package:helpa/src/features/summary/models/summary.dart';
 import 'package:helpa/src/features/home/widget/summary_widget.dart';
@@ -63,17 +62,16 @@ class _HomeScreenState extends State<HomeScreen> {
                 .then((_) => _onRefresh()),
             icon: const Icon(Icons.add),
           ),
-          IconButton(
-            tooltip: 'Начать собеседование',
-            onPressed: () => Navigator.of(context)
-                .push(
-                  MaterialPageRoute(
-                    builder: (context) => const InterviewScreen(),
-                  ),
-                )
-                .then((_) => _onRefresh()),
-            icon: const Icon(Icons.start_rounded),
-          ),
+          // Раскомментирую когда будет режим собеседования по всем конспектам
+          // IconButton(
+          //   tooltip: 'Начать собеседование',
+          //   onPressed: () => Navigator.of(context).push(
+          //     MaterialPageRoute(
+          //       builder: (context) =>  InterviewScreen(summary: ,),
+          //     ),
+          //   ),
+          //   icon: const Icon(Icons.start_rounded),
+          // ),
           IconButton(
             tooltip: 'Удалить все записи',
             onPressed: () => deleteAllSummaries(),

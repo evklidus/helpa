@@ -3,6 +3,7 @@ import 'dart:math';
 
 import 'package:flutter/material.dart';
 import 'package:helpa/src/common/widget/custom_text_field.dart';
+import 'package:helpa/src/features/interview/widget/interview_screen.dart';
 import 'package:helpa/src/features/summary/data/summaries_data_provider.dart';
 import 'package:helpa/src/features/summary/models/summary.dart';
 import 'package:shared_preferences/shared_preferences.dart';
@@ -60,6 +61,18 @@ class _SummaryScreenState extends State<SummaryScreen> {
       appBar: AppBar(
         title: const Text('Конспект'),
         actions: [
+          if (widget.summary != null)
+            IconButton(
+              tooltip: 'Начать собеседование',
+              onPressed: () => Navigator.of(context).push(
+                MaterialPageRoute(
+                  builder: (context) => InterviewScreen(
+                    summary: widget.summary!,
+                  ),
+                ),
+              ),
+              icon: const Icon(Icons.start_rounded),
+            ),
           if (widget.summary != null)
             IconButton(
               tooltip: 'Удалить запись',
