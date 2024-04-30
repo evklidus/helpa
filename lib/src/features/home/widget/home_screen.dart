@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:helpa/src/features/interview/widget/interview_screen.dart';
 import 'package:helpa/src/features/summary/data/summaries_data_provider.dart';
 import 'package:helpa/src/features/summary/models/summary.dart';
 import 'package:helpa/src/features/home/widget/summary_widget.dart';
@@ -19,10 +20,6 @@ class HomeScreen extends StatefulWidget {
 /// State for widget HomeScreen.
 class _HomeScreenState extends State<HomeScreen> {
   late Future<List<SummaryModel>> _data;
-  //  = [
-  //   const SummaryModel(topic: 'Topic 1', text: 'Text'),
-  //   const SummaryModel(topic: 'Topic 2', text: 'Text'),
-  // ]
 
   Future<List<SummaryModel>> fetchSummaries() async {
     final prefs = await SharedPreferences.getInstance();
@@ -65,6 +62,17 @@ class _HomeScreenState extends State<HomeScreen> {
                 )
                 .then((_) => _onRefresh()),
             icon: const Icon(Icons.add),
+          ),
+          IconButton(
+            tooltip: 'Начать собеседование',
+            onPressed: () => Navigator.of(context)
+                .push(
+                  MaterialPageRoute(
+                    builder: (context) => const InterviewScreen(),
+                  ),
+                )
+                .then((_) => _onRefresh()),
+            icon: const Icon(Icons.start_rounded),
           ),
           IconButton(
             tooltip: 'Удалить все записи',

@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:helpa/src/features/home/widget/home_screen.dart';
 
 void main() {
+  WidgetsFlutterBinding.ensureInitialized();
   runApp(const HelpaApp());
 }
 

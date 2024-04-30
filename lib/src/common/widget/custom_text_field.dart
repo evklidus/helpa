@@ -24,6 +24,8 @@ class CustomTextField extends StatelessWidget {
     this.onTapOutside,
     this.dense = true,
     this.enabled = true,
+    this.decoration,
+    this.style,
   });
 
   /// Controls the text being edited.
@@ -74,16 +76,24 @@ class CustomTextField extends StatelessWidget {
   ///
   final void Function(PointerDownEvent)? onTapOutside;
 
+  ///
   final TextStyle? errorStyle;
 
   ///
   final Widget? suffix;
+
+  ///
+  final InputDecoration? decoration;
+
+  ///
+  final TextStyle? style;
 
   @override
   Widget build(BuildContext context) {
     return Padding(
       padding: EdgeInsets.symmetric(vertical: dense ? 8 : 2),
       child: TextFormField(
+        style: style,
         onTapOutside: onTapOutside,
         enabled: enabled,
         focusNode: focusNode,
@@ -95,43 +105,44 @@ class CustomTextField extends StatelessWidget {
         keyboardType: keyboardType,
         inputFormatters: inputFormatters,
         onChanged: onChanged,
-        decoration: InputDecoration(
-          labelStyle: labelStyle ??
-              context.textTheme.bodyMedium!.copyWith(
-                color: context.colorScheme.primary,
-                fontWeight: FontWeight.bold,
+        decoration: decoration ??
+            InputDecoration(
+              labelStyle: labelStyle ??
+                  context.textTheme.bodyMedium!.copyWith(
+                    color: context.colorScheme.primary,
+                    fontWeight: FontWeight.bold,
+                  ),
+              errorStyle: errorStyle,
+              hintText: hintText,
+              filled: true,
+              fillColor: context.colorScheme.background,
+              errorBorder: const OutlineInputBorder(
+                borderSide: BorderSide(color: Color(0xFFB95D6D)),
+                borderRadius: BorderRadius.all(Radius.circular(16)),
               ),
-          errorStyle: errorStyle,
-          hintText: hintText,
-          filled: true,
-          fillColor: context.colorScheme.background,
-          errorBorder: const OutlineInputBorder(
-            borderSide: BorderSide(color: Color(0xFFB95D6D)),
-            borderRadius: BorderRadius.all(Radius.circular(16)),
-          ),
-          focusedErrorBorder: const OutlineInputBorder(
-            borderSide: BorderSide(color: Color(0xFFB95D6D)),
-            borderRadius: BorderRadius.all(Radius.circular(16)),
-          ),
-          enabledBorder: const OutlineInputBorder(
-            borderSide: BorderSide(color: Color(0xFF272727)),
-            borderRadius: BorderRadius.all(Radius.circular(16)),
-          ),
-          disabledBorder: const OutlineInputBorder(
-            borderSide: BorderSide(color: Color(0xFF272727)),
-            borderRadius: BorderRadius.all(Radius.circular(16)),
-          ),
-          focusedBorder: OutlineInputBorder(
-            borderSide: BorderSide(
-              color: context.colorScheme.primary.withOpacity(.4),
-              width: 1.5,
+              focusedErrorBorder: const OutlineInputBorder(
+                borderSide: BorderSide(color: Color(0xFFB95D6D)),
+                borderRadius: BorderRadius.all(Radius.circular(16)),
+              ),
+              enabledBorder: const OutlineInputBorder(
+                borderSide: BorderSide(color: Color(0xFF272727)),
+                borderRadius: BorderRadius.all(Radius.circular(16)),
+              ),
+              disabledBorder: const OutlineInputBorder(
+                borderSide: BorderSide(color: Color(0xFF272727)),
+                borderRadius: BorderRadius.all(Radius.circular(16)),
+              ),
+              focusedBorder: OutlineInputBorder(
+                borderSide: BorderSide(
+                  color: context.colorScheme.primary.withOpacity(.4),
+                  width: 1.5,
+                ),
+                borderRadius: const BorderRadius.all(Radius.circular(16)),
+              ),
+              labelText: label,
+              isDense: true,
+              suffixIcon: suffix,
             ),
-            borderRadius: const BorderRadius.all(Radius.circular(16)),
-          ),
-          labelText: label,
-          isDense: true,
-          suffixIcon: suffix,
-        ),
       ),
     );
   }

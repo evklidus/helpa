@@ -1,3 +1,4 @@
+import 'dart:async';
 import 'dart:math';
 
 import 'package:flutter/material.dart';
@@ -71,6 +72,7 @@ class _SummaryScreenState extends State<SummaryScreen> {
               icon: const Icon(Icons.delete_forever_rounded),
             ),
           if (_isSummaryChanged)
+            // TODO: Дублируется при нажатии сохранить более 1-го раза
             TextButton(
               onPressed: () {
                 final summary = SummaryModel(
@@ -95,7 +97,12 @@ class _SummaryScreenState extends State<SummaryScreen> {
           children: [
             CustomTextField(
               controller: _topicController,
-              hintText: 'Тема',
+              decoration: const InputDecoration.collapsed(hintText: 'Тема'),
+              textInputAction: TextInputAction.done,
+              style: const TextStyle(
+                fontSize: 32,
+                fontWeight: FontWeight.bold,
+              ),
               onChanged: (val) {
                 if (val != widget.summary?.topic) {
                   setState(() => _isSummaryChanged = true);
@@ -105,8 +112,7 @@ class _SummaryScreenState extends State<SummaryScreen> {
             const SizedBox(height: 8),
             CustomTextField(
               controller: _textController,
-              hintText: 'Текст',
-              maxLines: null,
+              decoration: const InputDecoration.collapsed(hintText: 'Текст'),
               onChanged: (val) {
                 if (val != widget.summary?.text) {
                   setState(() => _isSummaryChanged = true);
