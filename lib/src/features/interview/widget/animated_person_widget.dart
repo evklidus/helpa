@@ -9,15 +9,13 @@ class AnimatedPersonWidget extends StatefulWidget {
     super.key,
     this.onQuestionStart,
     required this.flutterTts,
-    required this.quastion,
   });
 
   final Future Function()? onQuestionStart;
   final FlutterTts flutterTts;
-  final String quastion;
 
   @override
-  _AnimatedPersonWidgetState createState() => _AnimatedPersonWidgetState();
+  State<AnimatedPersonWidget> createState() => _AnimatedPersonWidgetState();
 }
 
 class _AnimatedPersonWidgetState extends State<AnimatedPersonWidget>
@@ -25,6 +23,14 @@ class _AnimatedPersonWidgetState extends State<AnimatedPersonWidget>
   late final AnimationController _controller;
   late final Animation<double> _animation;
   final List<String> _currentWords = [];
+
+  String get _text => _currentWords.join(' ');
+
+  final answerTextStyle = const TextStyle(
+    color: Colors.blueAccent,
+    fontSize: 24,
+    fontWeight: FontWeight.w500,
+  );
 
   @override
   void initState() {
@@ -39,6 +45,12 @@ class _AnimatedPersonWidgetState extends State<AnimatedPersonWidget>
     );
 
     widget.flutterTts.setCompletionHandler(() => _controller.stop());
+
+    widget.flutterTts.setProgressHandler(
+      (String text, int startOffset, int endOffset, String word) => setState(
+        () => _currentWords.add(word),
+      ),
+    );
   }
 
   @override
@@ -56,43 +68,65 @@ class _AnimatedPersonWidgetState extends State<AnimatedPersonWidget>
   @override
   Widget build(BuildContext context) {
     final isCupertino = Platform.isIOS || Platform.isMacOS;
-    final width = MediaQuery.sizeOf(context).width;
-    return Column(
-      mainAxisAlignment: MainAxisAlignment.center,
-      children: [
-        AnimatedBuilder(
-          animation: _animation,
-          builder: (context, child) {
-            return Transform.scale(
-              scale: _animation.value,
-              child: Icon(
-                isCupertino ? CupertinoIcons.person : Icons.person,
-                size: width / 8,
-                color: Colors.blue,
-              ),
-            );
-          },
-        ),
-        const SizedBox(height: 20),
-        ElevatedButton(
-          onPressed: startSpeechAnimation,
-          child: const Text('Озвучить вопрос'),
-        ),
-        const SizedBox(height: 20),
-        StatefulBuilder(
-          builder: (context, setState) {
-            if (widget.flutterTts.progressHandler == null) {
-              widget.flutterTts.setProgressHandler(
-                (String text, int startOffset, int endOffset, String word) =>
-                    setState(
-                  () => _currentWords.add(word),
+    final shortestSide = MediaQuery.sizeOf(context).shortestSide;
+    return Padding(
+      padding: const EdgeInsets.all(16),
+      child: Column(
+        mainAxisAlignment: MainAxisAlignment.center,
+        children: [
+          AnimatedBuilder(
+            animation: _animation,
+            builder: (context, child) {
+              return Transform.scale(
+                scale: _animation.value,
+                child: Icon(
+                  isCupertino ? CupertinoIcons.person : Icons.person,
+                  size: shortestSide / 6,
+                  color: Colors.blue,
                 ),
               );
-            }
-            return Text(_currentWords.join(' '));
-          },
-        ),
-      ],
+            },
+          ),
+          const SizedBox(height: 20),
+          ElevatedButton(
+            onPressed: startSpeechAnimation,
+            child: const Text('Озвучить вопрос'),
+          ),
+          const SizedBox(height: 20),
+          SizedBox(
+            width: shortestSide,
+            child: AnimatedCrossFade(
+              crossFadeState: _text.isNotEmpty
+                  ? CrossFadeState.showFirst
+                  : CrossFadeState.showSecond,
+              duration: const Duration(milliseconds: 150),
+              firstChild: Text.rich(
+                TextSpan(
+                  children: [
+                    const TextSpan(
+                      text: 'Ответьте на следующую тему: ',
+                      style: TextStyle(
+                        color: Colors.black54,
+                        fontSize: 16,
+                      ),
+                    ),
+                    TextSpan(
+                      text: _text,
+                      style: answerTextStyle,
+                    ),
+                  ],
+                ),
+              ),
+              secondChild: Center(
+                child: Text(
+                  '...',
+                  style: answerTextStyle,
+                ),
+              ),
+            ),
+          ),
+        ],
+      ),
     );
   }
 }

@@ -50,9 +50,7 @@ class _InterviewScreenState extends State<InterviewScreen> {
     ).ignore();
   }
 
-  Future<void> _speak() => _flutterTts.speak(
-        'Ответьте на следующую тему: ${widget.summary.topic}',
-      );
+  Future<void> _speak() => _flutterTts.speak(widget.summary.topic);
 
   Future<void> _stop() => _flutterTts.stop();
 
@@ -84,7 +82,6 @@ class _InterviewScreenState extends State<InterviewScreen> {
             AnimatedPersonWidget(
               onQuestionStart: onQuastionStart,
               flutterTts: _flutterTts,
-              quastion: widget.summary.topic,
             ),
             if (_cameraController?.value.isInitialized ?? false)
               CameraPreview(_cameraController!)
