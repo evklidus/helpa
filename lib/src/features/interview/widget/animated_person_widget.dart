@@ -26,7 +26,7 @@ class _AnimatedPersonWidgetState extends State<AnimatedPersonWidget>
 
   String get _text => _currentWords.join(' ');
 
-  final answerTextStyle = const TextStyle(
+  final questionTextStyle = const TextStyle(
     color: Colors.blueAccent,
     fontSize: 24,
     fontWeight: FontWeight.w500,
@@ -69,64 +69,61 @@ class _AnimatedPersonWidgetState extends State<AnimatedPersonWidget>
   Widget build(BuildContext context) {
     final isCupertino = Platform.isIOS || Platform.isMacOS;
     final shortestSide = MediaQuery.sizeOf(context).shortestSide;
-    return Padding(
-      padding: const EdgeInsets.all(16),
-      child: Column(
-        mainAxisAlignment: MainAxisAlignment.center,
-        children: [
-          AnimatedBuilder(
-            animation: _animation,
-            builder: (context, child) {
-              return Transform.scale(
-                scale: _animation.value,
-                child: Icon(
-                  isCupertino ? CupertinoIcons.person : Icons.person,
-                  size: shortestSide / 6,
-                  color: Colors.blue,
-                ),
-              );
-            },
-          ),
-          const SizedBox(height: 20),
-          ElevatedButton(
-            onPressed: startSpeechAnimation,
-            child: const Text('Озвучить вопрос'),
-          ),
-          const SizedBox(height: 20),
-          SizedBox(
-            width: shortestSide,
-            child: AnimatedCrossFade(
-              crossFadeState: _text.isNotEmpty
-                  ? CrossFadeState.showFirst
-                  : CrossFadeState.showSecond,
-              duration: const Duration(milliseconds: 150),
-              firstChild: Text.rich(
-                TextSpan(
-                  children: [
-                    const TextSpan(
-                      text: 'Ответьте на следующую тему: ',
-                      style: TextStyle(
-                        color: Colors.black54,
-                        fontSize: 16,
-                      ),
-                    ),
-                    TextSpan(
-                      text: _text,
-                      style: answerTextStyle,
-                    ),
-                  ],
-                ),
+    return Column(
+      mainAxisAlignment: MainAxisAlignment.center,
+      children: [
+        AnimatedBuilder(
+          animation: _animation,
+          builder: (context, child) {
+            return Transform.scale(
+              scale: _animation.value,
+              child: Icon(
+                isCupertino ? CupertinoIcons.person : Icons.person,
+                size: shortestSide / 6,
+                color: Colors.blue,
               ),
-              secondChild: Center(
-                child: Text(
-                  '...',
-                  style: answerTextStyle,
-                ),
+            );
+          },
+        ),
+        const SizedBox(height: 20),
+        ElevatedButton(
+          onPressed: startSpeechAnimation,
+          child: const Text('Озвучить вопрос'),
+        ),
+        const SizedBox(height: 20),
+        SizedBox(
+          width: shortestSide,
+          child: AnimatedCrossFade(
+            crossFadeState: _text.isNotEmpty
+                ? CrossFadeState.showFirst
+                : CrossFadeState.showSecond,
+            duration: const Duration(milliseconds: 150),
+            firstChild: Text.rich(
+              TextSpan(
+                children: [
+                  const TextSpan(
+                    text: 'Ответьте на следующую тему: ',
+                    style: TextStyle(
+                      color: Colors.black54,
+                      fontSize: 16,
+                    ),
+                  ),
+                  TextSpan(
+                    text: _text,
+                    style: questionTextStyle,
+                  ),
+                ],
+              ),
+            ),
+            secondChild: Center(
+              child: Text(
+                '...',
+                style: questionTextStyle,
               ),
             ),
           ),
-        ],
-      ),
+        ),
+      ],
     );
   }
 }
